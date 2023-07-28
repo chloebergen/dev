@@ -14,6 +14,14 @@ if ($null -eq $appPath.manifest) {
 }
 ManifestExists 2>&1 > $errorPath
 
+# If PatientNow is currently running as any user, the process will terminate.
+$processPN = Get-Process -name "*PatientNow*"
+if ($null -ne $processPN) {
+Stop-Process -InputObject $processPN
+Get-Process | Where-Object {$_.HasExited}
+} else {
+    Write-Host "PatientNow is not running currently, proceeding..."}
+
 # Adds an application compatibility entry to prevent UAC prompts for the specified application
 Write-Host "Disabling UAC for PatientNow..."
 $manifestPath = "$appPath.manifest"
