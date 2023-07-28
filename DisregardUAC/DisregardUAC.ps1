@@ -1,5 +1,18 @@
 # Path of the application
 $appPath = "C:\PN\CloudLoader\PatientNowCloudLoader.exe"
+$errorPath = "C:\PN\CloudLoader\AutomationError.txt"
+
+# Abort if the manifest file already exists.
+$errorMessage = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')]"
+function ManifestExists {
+if ($null -eq $appPath.manifest) {
+    Write-Error "$errorMessage Manifest has been applied previously."
+    Exit
+} else {
+    Write-Host "Manifest has not been applied previously, continuing with application."
+}
+}
+ManifestExists 2>&1 > $errorPath
 
 # Adds an application compatibility entry to prevent UAC prompts for the specified application
 Write-Host "Disabling UAC for PatientNow..."
