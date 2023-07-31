@@ -42,3 +42,29 @@ $manifestPath = "$appPath.manifest"
 Write-Host "Applying the compatibility manifest to PatientNow..."
 cmd.exe /c "mt.exe -manifest $manifestPath -outputresource:`"$appPath`;#1"
 Write-Host "UAC prompts have been disabled for PatientNow."
+
+
+#######  Testing Policy #######
+## Variables
+$GetPolicy = Get-ExecutionPolicy -List
+$SetPolicy = Set-ExecutionPolicy Unrestricted
+$hasChangePolicyTriggered = $false
+
+## Change the ExecutionPolicy if it would give us errors running our script. 
+if ($GetPolicy -ne "Unrestricted"){
+    $SetPolicy
+    Write-Error "Changing the Execution Policy to Unrestricted... "
+    $hasChangePolicyTriggered = $true
+}
+
+## Revert the ExecutionPolicy back after the script is done runniung.
+$RevertPolicy = Set-ExecutionPolicy Default
+
+if ($hasChangePolicyTriggered -eq $true){
+    $RevertPolicy
+    Write-Host "Reverting the Execution Policy back to system defaults..."
+
+}
+
+#######  Testing  #######
+
