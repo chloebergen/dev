@@ -74,7 +74,7 @@ if ($hasChangePolicyTriggered -eq $true){
 
 
 
-
+##################################################
 #######  Testing OneDrive Files-on-Demand  #######
 
 Get-ChildItem $ENV:OneDriveCommercial -Force -File -Recurse -ErrorAction SilentlyContinue |
@@ -91,7 +91,7 @@ ForEach-Object {
 }
 
 
-
+##################################################
 #######  Testing...  #######
 
 
@@ -135,7 +135,7 @@ Online Available (3.ps1) -> Has the attribute 5248544
 #     the target of the Symbolic Link #>
 
 
-
+##################################################
 #### Disk Space #### 
 
 Get-ChildItem -Directory | ForEach-Object {
@@ -148,7 +148,7 @@ Get-ChildItem -Directory | ForEach-Object {
 
 -ErrorAction 'SilentlyContinue'
 
-
+##################################################
 ## Disk Cleanup
 
 Start-Process -FilePath "cleanmgr.exe" -ArgumentList "/d [driveletter]:", "/sageset:allsettings"
@@ -158,7 +158,7 @@ Start-Process -FilePath "cleanmgr.exe" -ArgumentList "/sagerun:allsettings"
 
 cleanmgr /verylowdisk
 
-
+##################################################
 ## Storage Sense
 Function Enable-StorageSense{
     # Enable Storage Sense
@@ -175,6 +175,7 @@ Function Enable-StorageSense{
 }
 
 
+##################################################
 ##  GPO for clear profiles older than X 
 # (Administrative Templates > System > User Profiles) 
 
@@ -185,5 +186,37 @@ https://learn.microsoft.com/en-us/sharepoint/use-group-policy
 [HKLM\SOFTWARE\Policies\Microsoft\OneDrive]"FilesOnDemandEnabled"=dword:00000001
 
 
+##################################################
 
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList
+
+
+# Delete user + reg profile
+$username = "Whatever"
+Remove-Item "C:\Users\$username" -Recurse -Force
+$profileListKey = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList"
+$userSID = (Get-WmiObject Win32_UserAccount | Where-Object {$_.Name -eq $username}).SID 
+Remove-ItemProperty -Path $profileListKey -Name $userSID -Force
+
+
+
+
+##################################################
+##### Delete Older Than X #####
+
+# Var
+$dirPath = "C:\Users"
+$dirGet = Get-ChildItem $dirPath -Directory
+$dirBefore = Get-Date "01-Jan-2022"
+$keep = "Public","Promedical","PMIT_ADMIN","admin",""
+
+
+# Pew pew
+foreach ($directory in $dirGet) {
+    if ($directory.LastWriteTime -lt $dirBefore) -and ($directory.Name -notin $keep){
+        Write-Host "Deleting $($directory.FullName)...."
+        Remove-Item -Path $directory.FullName -Recurse -Force
+    }
+}
+
+
