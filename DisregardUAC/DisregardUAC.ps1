@@ -6,7 +6,7 @@ $errorPath = "C:\PN\CloudLoader\AutomationError.txt"
 $errorMessage = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')]"
 
 function ManifestExists {
-if ($null -eq $appPath.manifest) {
+if ($null -ne $appPath.manifest) {
     Write-Error "$errorMessage Manifest has been applied previously."
     Exit
 } else {
