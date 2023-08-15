@@ -2,7 +2,6 @@
 $transcriptPath = "C:\PN\CloudLoader\AutomationTranscript.txt"
 Start-Transcript -Path $transcriptPath -Append
 
-
 ## Path of the application
 $appPath = "C:\PN\CloudLoader\PatientNowCloudLoader.exe"
 $errorPath = "C:\PN\CloudLoader\AutomationError.txt"
