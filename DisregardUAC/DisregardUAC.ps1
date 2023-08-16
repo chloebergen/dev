@@ -22,7 +22,7 @@ ManifestExists 2>&1 > $errorPath
 ## If PatientNow is currently running as any user, the process will terminate.
 $processPN = Get-Process -name "*PatientNow*"
 if ($null -ne $processPN) {
-Stop-Process -InputObject $processPN
+Stop-Process -InputObject $processPN -Confirm
 Get-Process | Where-Object {$_.HasExited}
 } else {
     Write-Host "PatientNow is not running currently, proceeding..."}
