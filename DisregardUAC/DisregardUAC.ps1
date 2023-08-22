@@ -1,33 +1,38 @@
-## Transcript
+## Disables confirm dialogue, starts transcribing 
+$ConfirmPreference = "None"
 $transcriptPath = "C:\PN\CloudLoader\AutomationTranscript.txt"
 Start-Transcript -Path $transcriptPath -Append
+$timeStamp = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')]"
 
-## Path of the application
+
+## Paths
 $appPath = "C:\PN\CloudLoader\PatientNowCloudLoader.exe"
 $errorPath = "C:\PN\CloudLoader\AutomationError.txt"
-$timeStamp = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')]"
+$testPath = "$appPath.manifest"
+
 
 ## Abort if the manifest file already exists.
 function ManifestExists {
-$testPath = "$appPath.manifest"
 if (Test-Path $testPath -PathType Leaf) {
-    Write-Error "Manifest has been applied previously."
-    Exit
+    Write-Error "Manifest has been applied previously, deleting and reapplying manifest.."
+    Remove-Item $testPath -Verbose
 } else {
-    Write-Host "Manifest has not been applied previously, continuing with application."
+    Write-Host "Manifest has not been applied previously, continuing with application.."
 }
 }
 ManifestExists 2>&1 > $errorPath
 
+
 ## If PatientNow is currently running as any user, the process will terminate.
 $processPN = Get-Process -name "*PatientNow*"
 if ($null -ne $processPN) {
-Stop-Process -InputObject $processPN -Confirm
-Get-Process | Where-Object {$_.HasExited}
+    Stop-Process -InputObject $processPN 
+    Get-Process | Where-Object {$_.HasExited}
 } else {
     Write-Host "PatientNow is not running currently, proceeding..."}
 
-## Adds an application compatibility entry to prevent UAC prompts for the specified application
+
+## Adds an application compatibility entry to prevent UAC prompts for the specified path.
 Write-Host "Disabling UAC for PatientNow..."
 $manifestPath = "$appPath.manifest"
 @"
@@ -43,9 +48,14 @@ $manifestPath = "$appPath.manifest"
 </assembly>
 "@ | Out-File -Encoding ASCII $manifestPath
 
-## Applies the manifest file to the application
+
+## Applies the manifest file to the application path.
 Write-Host "Applying the compatibility manifest to PatientNow..."
 cmd.exe /c "mt.exe -manifest $manifestPath -outputresource:`"$appPath`;#1"
 Write-Host "UAC prompts have been disabled for PatientNow."
+
+
+## 
 Write-Host $timeStamp
 Stop-Transcript
+$ConfirmPreference = "High"
