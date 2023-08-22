@@ -10,19 +10,6 @@ $appPath = "C:\PN\CloudLoader\PatientNowCloudLoader.exe"
 $errorPath = "C:\PN\CloudLoader\AutomationError.txt"
 $testPath = "$appPath.manifest"
 
-
-## Abort if the manifest file already exists.
-function ManifestExists {
-if (Test-Path $testPath -PathType Leaf) {
-    Write-Error "Manifest has been applied previously, deleting and reapplying manifest.."
-    Remove-Item $testPath -Verbose
-} else {
-    Write-Host "Manifest has not been applied previously, continuing with application.."
-}
-}
-ManifestExists 2>&1 > $errorPath
-
-
 ## If PatientNow is currently running as any user, the process will terminate.
 $processPN = Get-Process -name "*PatientNow*"
 if ($null -ne $processPN) {
@@ -30,6 +17,18 @@ if ($null -ne $processPN) {
     Get-Process | Where-Object {$_.HasExited}
 } else {
     Write-Host "PatientNow is not running currently, proceeding..."}
+
+    
+## Abort if the manifest file already exists.
+function ManifestExists {
+    if (Test-Path $testPath -PathType Leaf) {
+        Write-Error "Manifest has been applied previously, deleting and reapplying manifest.."
+        Remove-Item $testPath -Verbose
+    } else {
+        Write-Host "Manifest has not been applied previously, continuing with application.."
+    }
+    }
+    ManifestExists 2>&1 > $errorPath
 
 
 ## Adds an application compatibility entry to prevent UAC prompts for the specified path.
