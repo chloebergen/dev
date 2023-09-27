@@ -229,3 +229,84 @@ foreach ($directory in $dirGet){
         Write-Host "Deleting $($directory.FullName)...."
     }
 }
+
+
+
+######### Bulk Local Admin 
+
+$name = "Test"
+$description = "Local Administrator account test"
+$password = Read-Host -AsSecureString
+
+
+New-LocalUser -Name $name -Password $password -FullName $name -Description $description
+Add-LocalGroupMember -Group Administrators -Member $name
+
+
+
+### Reg Delete
+
+{Get-ChildItem -Path Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Enrollments -Exclude "Context","Ownership","Status","ValidNodePaths" | Remove-Item -Force -Recurse}
+
+
+
+Get-ChildItem -Path Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Enrollments -Recurse | Where-Object { $_.Name -ne "Context""Ownership","Status","ValidNodePaths"} | Remove-Item -Force
+
+
+######### Cred Manager
+
+clear
+$keys = cmdkey /list 
+ForEach($key in $keys){
+    if($key -like "*Target:*" -and $key -like "*office*"){
+        #cmdkey /del:($key -replace " ","" -replace "Target:","")
+        $key
+
+    }
+}
+
+
+################
+
+$name = "Teams"
+
+
+Import-Module -Name MSCommerce
+Connect-MSCommerce 
+$product = Get-MSCommerceProductPolicies -PolicyId AllowSelfServicePurchase | where {$_.ProductName -match $name}
+Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase -ProductId $product.ProductID -Value "Disabled"
+
+####
+Install-Module -Name MSCommerce
+Import-Module -Name MSCommerce 
+
+Connect-MSCommerce 
+$product = Get-MSCommerceProductPolicies -PolicyId AllowSelfServicePurchase
+
+if ($product.PolicyValue -eq "Enabled"){
+    Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase -ProductId $_.ProductID -Enabled $false  
+}
+
+ | forEach { 
+ Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase -ProductId $_.ProductID -Enabled $false  
+}
+
+
+if {}
+
+#############################################
+Install-Module -Name MSCommerce
+Import-Module -Name MSCommerce 
+Connect-MSCommerce 
+
+$productIDs = Get-MSCommerceProductPolicies -PolicyId AllowSelfServicePurchase | where {$_.ProductId -like "C*"}
+foreach ($product in $productIDs){
+Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase $productIDs -Enabled $False  
+
+}
+
+
+$products = Get-MSCommerceProductPolicies -PolicyId AllowSelfServicePurchase | where {$_.ProductName -like '*'}
+
+foreach($product in $products){
+Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase $products.ProductID -Enabled $false}
