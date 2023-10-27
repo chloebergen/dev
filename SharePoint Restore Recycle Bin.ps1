@@ -47,10 +47,10 @@ $deletedByUser = "who@domain.com"
 Get-PnPRecycleBinItem -FirstStage | ? DeletedByEmail -eq $deletedByUser
 
 ## Validate
-Get-PnPRecycleBinItem | Where-Object {($_.DeletedByEmail -eq $deletedByUser)} | Select-Object -last 10 | Format-Table *
+Get-PnPRecycleBinItem | Where-Object {($_.DeletedByEmail -eq $deletedByUser)} | Select-Object -Last 10 | Format-Table *
 
 ## Export to CSV
-Get-PnPRecycleBinItem | Where-Object {($_.DeletedByEmail -eq $deletedByUser)} | Export-Csv c:\temp\restore.csv
+Get-PnPRecycleBinItem | Where-Object {($_.DeletedByEmail -eq $deletedByUser)} | Export-CSV -Path "C:\Temp\RecycleBinData.csv"
 
 ## Send it, brother 
 Get-PnPRecycleBinItem -FirstStage | Where-Object {($_.DeletedByEmail -eq $deletedByUser)} | Restore-PnpRecycleBinItem -Force

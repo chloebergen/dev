@@ -310,3 +310,9 @@ $products = Get-MSCommerceProductPolicies -PolicyId AllowSelfServicePurchase | w
 
 foreach($product in $products){
 Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase $products.ProductID -Enabled $false}
+
+
+
+### Filter enabled AD
+
+Get-ADUser -Filter 'enabled -eq $true' | Select-Object whatever | ft 
