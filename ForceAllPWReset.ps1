@@ -1,28 +1,3 @@
-Get-MsolUser -All | Set-MsolUserPassword -ForceChangePasswordOnly $true -ForceChangePassword $true
-
-
-
-Get-MsolUser -All | Set-MsolUserPassword -ForceChangePasswordOnly $true -ForceChangePassword $true
-
-
-$userList = Get-MsolUser -All
-foreach ($user in $userList)
-    Revoke-AzureADUserAllRefreshToken
-    Set-MsolUserPassword -ForceChangePasswordOnly $true -ForceChangePassword $true
-    Write-Host $
-
-
-
-
-
-    Set-ADAccountPassword -Identity johndoe -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "p@ssw0rd1" -Force)
-Set-ADAccountPassword -Identity johndoe -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "p@ssw0rd2" -Force)
-
-
-
-
-###############
-
 ## Connect
 Connect-MgGraph -Scopes Directory.AccessAsUser.All, Directory.ReadWrite.All, User.ReadWrite.All
 Select-MgProfile Beta
