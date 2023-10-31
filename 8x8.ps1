@@ -60,9 +60,9 @@ Start-Process msiexec "/i $installer /qn /norestart"
 $test = Get-Package -Name '*8x8*'
 
 if($test -eq $true){
-    Write-Host "$programInstallName installed successfully."
+    Write-Host "8x8 installed successfully."
 } else { 
-    Write-Error "$programInstallName failed to install."
+    Write-Error "8x8 failed to install."
 }
 
 
