@@ -2,15 +2,7 @@
 Connect-MgGraph -Scopes Directory.AccessAsUser.All, Directory.ReadWrite.All, User.ReadWrite.All
 Select-MgProfile Beta
 
-## PW Hashtable 
-$passwordprofile = @{}
-$passwordprofile["Password"] = "verycomplicatedpasswordthatyoushouldchangeorgenerateautomaticallyideally"
-$passwordprofile["forceChangePasswordNextSignIn"] = $True
-$passwordprofile["forceChangePasswordNextSignInWithMfa"] = $False
-
-
-#####
-
+### Reset all users except the promedical admin account + force them to change on next login
 $upnOfAdminAccount = promedical@whateverdomain.onmicrosoft.com
 $UsersToChangePassword = Get-MgUser -All -Property UserPrincipalName, Id | Where-Object {$_.DisplayName -ne "$upnOfAdminAccount"}
 $CSVOutput = @()
