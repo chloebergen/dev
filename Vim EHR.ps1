@@ -1,11 +1,6 @@
-
-
-
-Start-Process "msiexec.exe" -ArgumentList "/i vim-connect-ecw-1.2.48.msi /qn PRODUCT_KEY=unzBthe5Zs4g36b8uKLdzh"
- RUN_ON_STARTUP="true" /L*V "C:\vim-connect-msi-install.log" 
-
-
-
+$ConfirmPreference = "None"
+$transcriptPath = "C:\MedicusIT\VimECW\Transcript.txt"
+Start-Transcript -Path $transcriptPath -Append
 
  ## Remove old files + create installation directories.
 Remove-Item -Path "C:\MedicusIT\VimECW\*.*" -Force -ErrorAction SilentlyContinue
@@ -40,17 +35,7 @@ if (Get-Command Invoke-WebRequest -ErrorAction SilentlyContinue) {
 ## Install MSI
 $installer = "$installPath\$filename"
 
-$installParams = '/i', "$installer", '/qn', 'PRODUCT_KEY="unzBthe5Zs4g36b8uKLdzh"', 'RUN_ON_STARTUP="true"', '/L*V', 'C:\vim-connect-msi-install.log'
-
-Start-Process "msiexec.exe" "/i vim-connect-ecw-1.80.0.msi /qn PRODUCT_KEY=unzBthe5Zs4g36b8uKLdzh RUN_ON_STARTUP=""true"" /L*V ""C:\vim-connect-msi-install.log"""
-#####
-Start-Process -Wait $env:systemroot\system32\msiexec.exe "/i $installer /qn PRODUCT_KEY=unzBthe5Zs4g36b8uKLdzh"
-
-Start-Process -Wait $env:systemroot\system32\msiexec.exe "/i $installer MyServer=`"servername:8080|4344`"     MyDomain=`"999-Test`""
-
-
-
-## I Think this works Start-Process "msiexec.exe" "/i vim-connect-ecw-1.80.0.msi /qn PRODUCT_KEY=unzBthe5Zs4g36b8uKLdzh RUN_ON_STARTUP=""true"" /L*V ""C:\vim-connect-msi-install.log"""
+Start-Process "msiexec.exe" -ArgumentList "/i $installer /qn PRODUCT_KEY=unzBthe5Zs4g36b8uKLdzh RUN_ON_STARTUP=""true"" /L*V ""C:\vim-connect-msi-install.log"""
 
 ## Check if successfully installed
 $test = Get-Package -Name '*Vim*'
