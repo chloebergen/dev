@@ -1,6 +1,7 @@
+## This script downloads the Vim Connect ECW plug-in installation files and installs it via msiexec, including the organization key.
+## Author: Chloe Bergen (https://github.com/chloebergen)
+
 $ConfirmPreference = "None"
-$transcriptPath = "C:\MedicusIT\VimECW\Transcript.txt"
-Start-Transcript -Path $transcriptPath -Append
 
  ## Remove old files + create installation directories.
 Remove-Item -Path "C:\MedicusIT\VimECW\*.*" -Force -ErrorAction SilentlyContinue
@@ -19,6 +20,9 @@ if (Test-Path $testPath2 -PathType Container) {
     {New-Item -Path "C:\MedicusIT\VimECW" -ItemType Directory
 }
 
+## Starts transcription
+$transcriptPath = "C:\MedicusIT\VimECW\Transcript.txt"
+Start-Transcript -Path $transcriptPath -Append
 
 # Set .Net to TLS1.2 (3072)
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
@@ -34,7 +38,6 @@ if (Get-Command Invoke-WebRequest -ErrorAction SilentlyContinue) {
     (New-Object Net.WebClient).DownloadFile($installUrl, "$installPath\$filename")
 }
 
-
 ## Install MSI
 $installer = "$installPath\$filename"
 $installLog = "C:\MedicusIT\VimECW\InstallLog.txt"
@@ -49,4 +52,5 @@ if($test.Count -gt 0) {
     Write-Error "Vim Connect ECW failed to install."
 }
 
+Stop-Transcript
 $ConfirmPreference = "High"

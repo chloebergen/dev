@@ -1,6 +1,7 @@
+## This script removes the previous version of 8x8 Work's installation files and installs it via msiexec.
+## Author: Chloe Bergen (https://github.com/chloebergen)
+
 $ConfirmPreference = "None"
-$transcriptPath = "C:\MedicusIT\8x8\Transcript.txt"
-Start-Transcript -Path $transcriptPath -Append
 
 ## Remove old files + create installation directories.
 Remove-Item -Path "C:\MedicusIT\8x8\*.*" -Force -ErrorAction SilentlyContinue
@@ -19,8 +20,8 @@ if (Test-Path $testPath2 -PathType Container) {
     New-Item -Path "C:\MedicusIT\8x8" -ItemType Directory
 }
 
-
-# Transcript
+## Creates a transcript 
+$transcriptPath = "C:\MedicusIT\8x8\Transcript.txt"
 Start-Transcript -Path $transcriptPath -Append
 
 # Set .Net to TLS1.2 (3072)
@@ -48,7 +49,6 @@ if ($true -eq $programList) {
     }
 }
 
-
 ## Download 8x8 
 $installUrl= "https://vod-updates.8x8.com/ga/work-64-msi-v8.7.2-3.msi"
 $installPath = "C:\MedicusIT\8x8"
@@ -59,7 +59,6 @@ if (Get-Command Invoke-WebRequest -ErrorAction SilentlyContinue) {
 } else {
     (New-Object Net.WebClient).DownloadFile($installUrl, "$installPath\$filename")
 }
-
 
 ## Install via msiexec
 $installer = "$installPath\$filename"
@@ -73,3 +72,6 @@ if($test.Count -gt 0) {
 } else { 
     Write-Error "8x8 failed to install."
 }
+
+Stop-Transcript
+$ConfirmPreference = "High"
