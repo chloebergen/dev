@@ -2,10 +2,6 @@ Install-Module -Name MSCommerce ## Install MSCommerce first, then run the rest o
 Import-Module -Name MSCommerce
 Connect-MSCommerce ## Enter the sites M365 credentials from ITGlue after being prompted
 
-
-
-
-
 $productIDs = (
     "CFQ7TTC0LH2H", "CFQ7TTC0LH3L", "CFQ7TTC0LSGZ", "CFQ7TTC0H6RP",
     "CFQ7TTC0H9MP", "CFQ7TTC0HDB1", "CFQ7TTC0HDB0", "CFQ7TTC0J1FV",
