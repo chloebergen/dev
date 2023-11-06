@@ -48,3 +48,5 @@ if($test.Count -gt 0) {
 } else { 
     Write-Error "Vim Connect ECW failed to install."
 }
+
+$ConfirmPreference = "High"
