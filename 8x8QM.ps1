@@ -43,9 +43,9 @@ if ($true -eq $programList) {
 }
 
 ## Download 8x8 Screen Recorder
-$installUrl= "https://qm-screen-recorder.8x8.com/Windows/latest"
+$installUrl= "https://qm-screen-recorder.8x8.com/Windows/ScreenRecorderSetup-6.2.2.msi"
 $installPath = "C:\MedicusIT\8x8\ScreenRecorder"
-$filename = "ScreenRecorderSetup.msi"   
+$filename = "ScreenRecorderSetup-6.2.2.msi"   
 
 if (Get-Command Invoke-WebRequest -ErrorAction SilentlyContinue) {
     Invoke-WebRequest -Uri "$installUrl" -OutFile "$installPath\$filename"
