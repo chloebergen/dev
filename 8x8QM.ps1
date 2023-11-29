@@ -2,6 +2,7 @@
 ## Author: Chloe Bergen (https://github.com/chloebergen)
 
 $ConfirmPreference = "None"
+Install-PackageProvider -Name "NuGet" -Confirm:$false
 
 ## Remove old files + create installation directories.
 Remove-Item -Path "C:\MedicusIT\8x8\ScreenRecorder\*.*" -Force -ErrorAction SilentlyContinue
