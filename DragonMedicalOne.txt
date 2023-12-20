@@ -1,3 +1,5 @@
 $path = "\\PGI-DC1\MedicusIT$\Standalone.msi"
 
 Start-Process "msiexec.exe" -ArgumentList "/i $path ORGANIZATIONTOKEN='740E788F-E62B-469E-9831-BAB8E9DE394E' SERVERURL='https://nsa.nuancehdp.com/basic' SUPPORTEDLANGUAGES='en-US' SUPPORTEDTOPICS='GeneralMedicine'"
+
+
