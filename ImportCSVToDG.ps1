@@ -1,3 +1,5 @@
+Import-Module ExchangeOnlineManagement 
+Connect-ExchangeOnline -UserPrincipalName "name@domain.com"
 
 ## Variables
 $distributionGroup = "CorporateAP"
