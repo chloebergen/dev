@@ -2,8 +2,8 @@ Import-Module ExchangeOnlineManagement
 Connect-ExchangeOnline -UserPrincipalName "name@domain.com"
 
 ## Variables
-$distributionGroup = "CorporateAP"
-$csv = "C:\CSV\conant+report.csv"
+$distributionGroup = "Name of the Distribution Group"
+$csv = "C:\FileName.csv"
 
 ## Function to check if the UPNs provided exist in this tenant 
 function UserExists($upn) {
